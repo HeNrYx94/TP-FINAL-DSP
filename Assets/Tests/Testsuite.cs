@@ -3,6 +3,7 @@ using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 
+
 public class PlayerMovementTests
 {
     [Test]
@@ -41,5 +42,26 @@ public class PlayerJumpTests
 
         // Verificar que la velocidad vertical del Rigidbody es igual a la fuerza del salto
         Assert.AreEqual(10f, rb.velocity.y, 0.1f, "El jugador no salta con la fuerza esperada.");
+    }
+}
+
+public class PlayerParticleEmissionTests
+{
+    [Test]
+    public void TestFootstepParticleEmission()
+    {
+        // Crear jugador y partículas
+        var playerObject = new GameObject();
+        var footsteps = new GameObject().AddComponent<ParticleSystem>();
+        var player = playerObject.AddComponent<PlayerController>();
+        player.footsteps = footsteps;
+
+        // Simular movimiento
+        player.MobileMove(1f);
+        player.SetAnimations();
+
+        // Verificar que las partículas están activas
+        var emission = footsteps.emission;
+        Assert.AreEqual(35f, emission.rateOverTime.constant, "La emisión de partículas no es la esperada al correr.");
     }
 }
